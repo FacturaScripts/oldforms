@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is part of FacturaScripts
- * Copyright (C) 2017-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * This file is part of OldForms plugin for FacturaScripts
+ * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,7 +19,7 @@
 
 namespace FacturaScripts\Plugins\OldForms\Controller;
 
-use FacturaScripts\Dinamic\Lib\ExtendedController\SalesDocumentController;
+use FacturaScripts\Plugins\OldForms\GridForms\SalesDocumentController;
 
 /**
  * Controller to edit a single item from the AlbaranCliente model
@@ -30,22 +30,12 @@ use FacturaScripts\Dinamic\Lib\ExtendedController\SalesDocumentController;
 class EditPedidoCliente extends SalesDocumentController
 {
 
-    /**
-     * Return the document class name.
-     *
-     * @return string
-     */
-    public function getModelClassName()
+    public function getModelClassName(): string
     {
         return 'PedidoCliente';
     }
 
-    /**
-     * Returns basic page attributes
-     *
-     * @return array
-     */
-    public function getPageData()
+    public function getPageData(): array
     {
         $data = parent::getPageData();
         $data['menu'] = 'sales';

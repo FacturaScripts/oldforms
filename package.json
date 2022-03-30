@@ -1,23 +1,4 @@
 {
-  "name": "comisiones",
-  "description": "Add handsontable to facturascripts.",
-  "main": "index.php",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FacturaScripts/oldforms.git"
-  },
-  "keywords": [
-    "facturascripts",
-    "php",
-    "invoice",
-    "erp",
-    "crm",
-    "billing",
-    "accounting"
-  ],
   "author": "Carlos García Gómez",
   "license": "LGPL-3.0",
   "bugs": {

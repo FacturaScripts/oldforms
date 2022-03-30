@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is part of FacturaScripts
- * Copyright (C) 2017-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * This file is part of OldForms plugin for FacturaScripts
+ * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,9 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace FacturaScripts\Plugins\OldForms\Controller;
 
-use FacturaScripts\Dinamic\Lib\ExtendedController\PurchaseDocumentController;
+use FacturaScripts\Plugins\OldForms\GridForms\PurchaseDocumentController;
 
 /**
  * Controller to edit a single item from the PresupuestoProveedor model
@@ -29,22 +30,12 @@ use FacturaScripts\Dinamic\Lib\ExtendedController\PurchaseDocumentController;
 class EditPresupuestoProveedor extends PurchaseDocumentController
 {
 
-    /**
-     * Return the document class name.
-     *
-     * @return string
-     */
-    public function getModelClassName()
+    public function getModelClassName(): string
     {
         return 'PresupuestoProveedor';
     }
 
-    /**
-     * Returns basic page attributes
-     *
-     * @return array
-     */
-    public function getPageData()
+    public function getPageData(): array
     {
         $data = parent::getPageData();
         $data['menu'] = 'purchases';

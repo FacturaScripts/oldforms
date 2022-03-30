@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is part of FacturaScripts
- * Copyright (C) 2017-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * This file is part of OldForms plugin for FacturaScripts
+ * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,9 +23,9 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Dinamic\Lib\Accounting\InvoiceToAccounting;
 use FacturaScripts\Dinamic\Lib\BusinessDocumentTools;
-use FacturaScripts\Dinamic\Lib\ExtendedController\PurchaseDocumentController;
 use FacturaScripts\Dinamic\Lib\ReceiptGenerator;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
+use FacturaScripts\Plugins\OldForms\GridForms\PurchaseDocumentController;
 
 /**
  * Controller to edit a single item from the FacturaProveedor model
@@ -37,22 +37,12 @@ use FacturaScripts\Dinamic\Model\FacturaProveedor;
 class EditFacturaProveedor extends PurchaseDocumentController
 {
 
-    /**
-     * Return the document class name.
-     *
-     * @return string
-     */
-    public function getModelClassName()
+    public function getModelClassName(): string
     {
         return 'FacturaProveedor';
     }
 
-    /**
-     * Returns basic page attributes
-     *
-     * @return array
-     */
-    public function getPageData()
+    public function getPageData(): array
     {
         $data = parent::getPageData();
         $data['menu'] = 'purchases';
@@ -61,9 +51,6 @@ class EditFacturaProveedor extends PurchaseDocumentController
         return $data;
     }
 
-    /**
-     * @param string $viewName
-     */
     protected function createAccountsView(string $viewName = 'ListAsiento')
     {
         $this->addListView($viewName, 'Asiento', 'accounting-entries', 'fas fa-balance-scale');
@@ -79,9 +66,6 @@ class EditFacturaProveedor extends PurchaseDocumentController
         $this->setSettings($viewName, 'btnNew', false);
     }
 
-    /**
-     * @param string $viewName
-     */
     protected function createReceiptsView(string $viewName = 'ListReciboProveedor')
     {
         $this->addListView($viewName, 'ReciboProveedor', 'receipts', 'fas fa-dollar-sign');
@@ -126,11 +110,6 @@ class EditFacturaProveedor extends PurchaseDocumentController
         $this->addHtmlView('refunds', 'Tab/RefundFacturaProveedor', 'FacturaProveedor', 'refunds', 'fas fa-share-square');
     }
 
-    /**
-     * @param string $action
-     *
-     * @return bool
-     */
     protected function execPreviousAction($action)
     {
         switch ($action) {
@@ -150,9 +129,6 @@ class EditFacturaProveedor extends PurchaseDocumentController
         return parent::execPreviousAction($action);
     }
 
-    /**
-     * @return bool
-     */
     protected function generateAccountingAction(): bool
     {
         $invoice = new FacturaProveedor();
@@ -182,9 +158,6 @@ class EditFacturaProveedor extends PurchaseDocumentController
         return true;
     }
 
-    /**
-     * @return bool
-     */
     protected function generateReceiptsAction(): bool
     {
         $invoice = new FacturaProveedor();
@@ -246,9 +219,6 @@ class EditFacturaProveedor extends PurchaseDocumentController
         }
     }
 
-    /**
-     * @return bool
-     */
     protected function newRefundAction(): bool
     {
         $invoice = new FacturaProveedor();
@@ -336,9 +306,6 @@ class EditFacturaProveedor extends PurchaseDocumentController
         return false;
     }
 
-    /**
-     * @return bool
-     */
     protected function paidAction(): bool
     {
         if (false === $this->permissions->allowUpdate) {

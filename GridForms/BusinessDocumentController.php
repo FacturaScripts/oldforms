@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is part of FacturaScripts
- * Copyright (C) 2017-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * This file is part of OldForms plugin for FacturaScripts
+ * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,14 +17,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace FacturaScripts\Plugins\OldForms\Lib\ExtendedController;
+namespace FacturaScripts\Plugins\OldForms\GridForms;
 
 use FacturaScripts\Core\Lib\ExtendedController\DocFilesTrait;
 use FacturaScripts\Core\Lib\ExtendedController\LogAuditTrait;
+use FacturaScripts\Core\Lib\ExtendedController\PanelController;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
 use FacturaScripts\Dinamic\Lib\BusinessDocumentFormTools;
-use FacturaScripts\Dinamic\Lib\ExtendedController\BusinessDocumentView;
-use FacturaScripts\Dinamic\Lib\ExtendedController\PanelController;
 
 /**
  * Description of BusinessDocumentController
@@ -143,9 +142,6 @@ abstract class BusinessDocumentController extends PanelController
         return parent::execPreviousAction($action);
     }
 
-    /**
-     * @return array
-     */
     protected function getBusinessFormData(): array
     {
         $data = ['custom' => [], 'final' => [], 'form' => [], 'lines' => [], 'subject' => []];
@@ -300,11 +296,6 @@ abstract class BusinessDocumentController extends PanelController
         return false;
     }
 
-    /**
-     * @param string $message
-     *
-     * @return string
-     */
     protected function saveDocumentError(string $message): string
     {
         foreach ($this->toolBox()->log()->read('', ['critical', 'error', 'warning']) as $msg) {
@@ -399,9 +390,6 @@ abstract class BusinessDocumentController extends PanelController
         return true;
     }
 
-    /**
-     * @return bool
-     */
     protected function subjectChangedAction(): bool
     {
         $this->setTemplate(false);

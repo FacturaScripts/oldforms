@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is part of FacturaScripts
- * Copyright (C) 2017-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * This file is part of OldForms plugin for FacturaScripts
+ * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace FacturaScripts\Plugins\OldForms\Lib\ExtendedController;
+
+namespace FacturaScripts\Plugins\OldForms\GridForms;
 
 use FacturaScripts\Dinamic\Model\Proveedor;
 
@@ -28,9 +29,6 @@ use FacturaScripts\Dinamic\Model\Proveedor;
 abstract class PurchaseDocumentController extends BusinessDocumentController
 {
 
-    /**
-     * @return array
-     */
     public function getCustomFields(): array
     {
         return [
@@ -42,28 +40,19 @@ abstract class PurchaseDocumentController extends BusinessDocumentController
         ];
     }
 
-    /**
-     * @return string
-     */
     public function getNewSubjectUrl(): string
     {
         $proveedor = new Proveedor();
         return $proveedor->url('new') . '?return=' . $this->url();
     }
 
-    /**
-     * @return array
-     */
-    public function getPageData()
+    public function getPageData(): array
     {
         $data = parent::getPageData();
         $data['showonmenu'] = false;
         return $data;
     }
 
-    /**
-     * @return string
-     */
     protected function getLineXMLView(): string
     {
         return 'PurchaseDocumentLine';
@@ -71,8 +60,8 @@ abstract class PurchaseDocumentController extends BusinessDocumentController
 
     /**
      * @param BusinessDocumentView $view
-     * @param array                $formData
-     * 
+     * @param array $formData
+     *
      * @return string
      */
     protected function setSubject(&$view, $formData): string

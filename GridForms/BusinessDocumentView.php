@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is part of FacturaScripts
- * Copyright (C) 2017-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * This file is part of OldForms plugin for FacturaScripts
+ * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,14 +17,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace FacturaScripts\Plugins\OldForms\Lib\ExtendedController;
+namespace FacturaScripts\Plugins\OldForms\GridForms;
 
 use FacturaScripts\Core\Base\ToolBox;
+use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
 use FacturaScripts\Core\Model\Base\TransformerDocument;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Lib\ExportManager;
-use FacturaScripts\Dinamic\Lib\ExtendedController\BaseView;
 use FacturaScripts\Dinamic\Lib\Widget\ColumnItem;
 use FacturaScripts\Dinamic\Model\EstadoDocumento;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,12 +61,6 @@ class BusinessDocumentView extends BaseView
      */
     public $model;
 
-    /**
-     * @param string $name
-     * @param string $title
-     * @param string $modelName
-     * @param string $icon
-     */
     public function __construct(string $name, string $title, string $modelName, string $icon = 'fas fa-file')
     {
         parent::__construct($name, $title, $modelName, $icon);
@@ -98,9 +92,6 @@ class BusinessDocumentView extends BaseView
         return [];
     }
 
-    /**
-     * @return int
-     */
     public function getMaxLines(): int
     {
         return intval(ini_get('max_input_vars') / count($this->getColumns()));
@@ -183,13 +174,6 @@ class BusinessDocumentView extends BaseView
         return class_exists($classLib) ? $classLib::all() : [];
     }
 
-    /**
-     * @param string $code
-     * @param array $where
-     * @param int $order
-     * @param int $offset
-     * @param int $limit
-     */
     public function loadData($code = '', $where = [], $order = [], $offset = 0, $limit = FS_ITEM_LIMIT)
     {
         if ($this->newCode !== null) {
@@ -227,7 +211,7 @@ class BusinessDocumentView extends BaseView
                 continue;
             }
 
-            /// empty line
+            // empty line
             $newLines[] = ['orden' => $order];
             $order--;
         }
@@ -241,19 +225,17 @@ class BusinessDocumentView extends BaseView
      */
     public function processFormData($request, $case)
     {
-        switch ($case) {
-            case 'load':
-                foreach ($request->query->all() as $key => $value) {
-                    if ($key == 'code') {
-                        continue;
-                    }
-
-                    $this->model->{$key} = $value;
-                    if ($key == $this->model->subjectColumn()) {
-                        $this->model->updateSubject();
-                    }
+        if ($case == 'load') {
+            foreach ($request->query->all() as $key => $value) {
+                if ($key == 'code') {
+                    continue;
                 }
-                break;
+
+                $this->model->{$key} = $value;
+                if ($key == $this->model->subjectColumn()) {
+                    $this->model->updateSubject();
+                }
+            }
         }
     }
 
@@ -268,11 +250,6 @@ class BusinessDocumentView extends BaseView
         AssetManager::add('js', FS_ROUTE . '/Dinamic/Assets/JS/BusinessDocumentView.js?v=4');
     }
 
-    /**
-     * @param string $code
-     *
-     * @return string
-     */
     protected function getCellAlign(string $code): string
     {
         switch ($code) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is part of FacturaScripts
- * Copyright (C) 2017-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * This file is part of OldForms plugin for FacturaScripts
+ * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace FacturaScripts\Plugins\OldForms\Lib\ExtendedController;
+namespace FacturaScripts\Plugins\OldForms\GridForms;
 
 use FacturaScripts\Dinamic\Model\Cliente;
 
@@ -29,9 +29,6 @@ use FacturaScripts\Dinamic\Model\Cliente;
 abstract class SalesDocumentController extends BusinessDocumentController
 {
 
-    /**
-     * @return array
-     */
     public function getCustomFields(): array
     {
         return [
@@ -43,28 +40,19 @@ abstract class SalesDocumentController extends BusinessDocumentController
         ];
     }
 
-    /**
-     * @return string
-     */
     public function getNewSubjectUrl(): string
     {
         $cliente = new Cliente();
         return $cliente->url('new') . '?return=' . $this->url();
     }
 
-    /**
-     * @return array
-     */
-    public function getPageData()
+    public function getPageData(): array
     {
         $data = parent::getPageData();
         $data['showonmenu'] = false;
         return $data;
     }
 
-    /**
-     * @return string
-     */
     protected function getLineXMLView(): string
     {
         return 'SalesDocumentLine';
@@ -87,13 +75,13 @@ abstract class SalesDocumentController extends BusinessDocumentController
             $addresses[] = ['value' => $contacto->idcontacto, 'title' => $contacto->descripcion];
         }
 
-        /// billing address
+        // billing address
         $columnBilling = $view->columnForName('billingaddr');
         if ($columnBilling) {
             $columnBilling->widget->setValuesFromArray($addresses, false);
         }
 
-        /// shipping address
+        // shipping address
         $columnShipping = $view->columnForName('shippingaddr');
         if ($columnShipping) {
             $columnShipping->widget->setValuesFromArray($addresses, false, true);
@@ -107,10 +95,8 @@ abstract class SalesDocumentController extends BusinessDocumentController
     protected function loadData($viewName, $view)
     {
         parent::loadData($viewName, $view);
-        switch ($viewName) {
-            case 'Edit' . $this->getModelClassName():
-                $this->loadCustomContactsWidget($view);
-                break;
+        if ($viewName == 'Edit' . $this->getModelClassName()) {
+            $this->loadCustomContactsWidget($view);
         }
     }
 

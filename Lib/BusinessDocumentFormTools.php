@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is part of FacturaScripts
- * Copyright (C) 2018-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * This file is part of OldForms plugin for FacturaScripts
+ * Copyright (C) 2018-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace FacturaScripts\Plugins\OldForms\Lib;
 
 use FacturaScripts\Core\Base\Utils;
@@ -35,11 +36,11 @@ class BusinessDocumentFormTools extends DinBusinessDocumentTools
      * Calculate document totals from form data and returns the new total and document lines.
      *
      * @param BusinessDocument $doc
-     * @param array            $formLines
+     * @param array $formLines
      *
      * @return string
      */
-    public function recalculateForm(BusinessDocument &$doc, array &$formLines)
+    public function recalculateForm(BusinessDocument &$doc, array &$formLines): string
     {
         $this->clearTotals($doc);
 
@@ -57,23 +58,22 @@ class BusinessDocumentFormTools extends DinBusinessDocumentTools
             $doc->totalsuplidos += $subt['totalsuplidos'];
         }
 
-        /// rounding totals again
-        $doc->neto = \round($doc->neto, (int) \FS_NF0);
-        $doc->netosindto = \round($doc->netosindto, (int) \FS_NF0);
-        $doc->totalirpf = \round($doc->totalirpf, (int) \FS_NF0);
-        $doc->totaliva = \round($doc->totaliva, (int) \FS_NF0);
-        $doc->totalrecargo = \round($doc->totalrecargo, (int) \FS_NF0);
-        $doc->totalsuplidos = \round($doc->totalsuplidos, (int) \FS_NF0);
-        $doc->total = \round($doc->neto + $doc->totalsuplidos + $doc->totaliva + $doc->totalrecargo - $doc->totalirpf, (int) \FS_NF0);
-        return \json_encode([
+        // rounding totals again
+        $doc->neto = round($doc->neto, (int)\FS_NF0);
+        $doc->netosindto = round($doc->netosindto, (int)\FS_NF0);
+        $doc->totalirpf = round($doc->totalirpf, (int)\FS_NF0);
+        $doc->totaliva = round($doc->totaliva, (int)\FS_NF0);
+        $doc->totalrecargo = round($doc->totalrecargo, (int)\FS_NF0);
+        $doc->totalsuplidos = round($doc->totalsuplidos, (int)\FS_NF0);
+        $doc->total = round($doc->neto + $doc->totalsuplidos + $doc->totaliva + $doc->totalrecargo - $doc->totalirpf, (int)FS_NF0);
+        return json_encode([
             'doc' => $doc,
             'lines' => $lines
         ]);
     }
 
     /**
-     *
-     * @param array            $fLine
+     * @param array $fLine
      * @param BusinessDocument $doc
      *
      * @return BusinessDocumentLine
@@ -81,13 +81,13 @@ class BusinessDocumentFormTools extends DinBusinessDocumentTools
     protected function recalculateFormLine(array $fLine, BusinessDocument $doc)
     {
         if (isset($fLine['cantidad']) && '' !== $fLine['cantidad']) {
-            /// edit line
+            // edit line
             $newLine = $doc->getNewLine($fLine, ['actualizastock']);
         } elseif (isset($fLine['referencia']) && '' !== $fLine['referencia']) {
-            /// new line with reference
+            // new line with reference
             $newLine = $doc->getNewProductLine($fLine['referencia']);
         } else {
-            /// new line without reference
+            // new line without reference
             $newLine = $doc->getNewLine();
             $newLine->descripcion = $fLine['descripcion'] ?? '';
         }
@@ -111,16 +111,15 @@ class BusinessDocumentFormTools extends DinBusinessDocumentTools
     }
 
     /**
-     *
      * @param BusinessDocumentLine $line
      */
     protected function recalculateFormLineTaxZones(&$line)
     {
         $newCodimpuesto = $line->codimpuesto;
 
-        /// tax manually changed?
-        if (\abs($line->getTax()->iva - $line->iva) >= 0.01) {
-            /// only defined tax are allowed
+        // tax manually changed?
+        if (abs($line->getTax()->iva - $line->iva) >= 0.01) {
+            // only defined tax are allowed
             $newCodimpuesto = null;
             foreach ($line->getTax()->all() as $tax) {
                 if ($line->iva == $tax->iva) {
@@ -129,7 +128,7 @@ class BusinessDocumentFormTools extends DinBusinessDocumentTools
                 }
             }
         } elseif ($line->codimpuesto === $line->getProducto()->codimpuesto) {
-            /// apply tax zones
+            // apply tax zones
             foreach ($this->taxZones as $taxZone) {
                 if ($newCodimpuesto === $taxZone->codimpuesto) {
                     $newCodimpuesto = $taxZone->codimpuestosel;
@@ -139,7 +138,7 @@ class BusinessDocumentFormTools extends DinBusinessDocumentTools
         }
 
         if ($newCodimpuesto !== $line->codimpuesto) {
-            /// set new tax
+            // set new tax
             $line->codimpuesto = $newCodimpuesto;
             $line->iva = $line->getTax()->iva;
             $line->recargo = $line->getTax()->recargo;

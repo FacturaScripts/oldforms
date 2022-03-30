@@ -1,7 +1,7 @@
 <?php
 /**
- * This file is part of FacturaScripts
- * Copyright (C) 2017-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * This file is part of OldForms plugin for FacturaScripts
+ * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,9 +23,9 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Dinamic\Lib\Accounting\InvoiceToAccounting;
 use FacturaScripts\Dinamic\Lib\BusinessDocumentTools;
-use FacturaScripts\Dinamic\Lib\ExtendedController\SalesDocumentController;
 use FacturaScripts\Dinamic\Lib\ReceiptGenerator;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
+use FacturaScripts\Plugins\OldForms\GridForms\SalesDocumentController;
 
 /**
  * Controller to edit a single item from the FacturaCliente model
@@ -37,22 +37,12 @@ use FacturaScripts\Dinamic\Model\FacturaCliente;
 class EditFacturaCliente extends SalesDocumentController
 {
 
-    /**
-     * Return the document class name.
-     *
-     * @return string
-     */
-    public function getModelClassName()
+    public function getModelClassName(): string
     {
         return 'FacturaCliente';
     }
 
-    /**
-     * Returns basic page attributes
-     *
-     * @return array
-     */
-    public function getPageData()
+    public function getPageData(): array
     {
         $data = parent::getPageData();
         $data['menu'] = 'sales';
@@ -61,9 +51,6 @@ class EditFacturaCliente extends SalesDocumentController
         return $data;
     }
 
-    /**
-     * @param string $viewName
-     */
     protected function createAccountsView(string $viewName = 'ListAsiento')
     {
         $this->addListView($viewName, 'Asiento', 'accounting-entries', 'fas fa-balance-scale');
@@ -79,9 +66,6 @@ class EditFacturaCliente extends SalesDocumentController
         $this->setSettings($viewName, 'btnNew', false);
     }
 
-    /**
-     * @param string $viewName
-     */
     protected function createReceiptsView(string $viewName = 'ListReciboCliente')
     {
         $this->addListView($viewName, 'ReciboCliente', 'receipts', 'fas fa-dollar-sign');
@@ -126,11 +110,6 @@ class EditFacturaCliente extends SalesDocumentController
         $this->addHtmlView('refunds', 'Tab/RefundFacturaCliente', 'FacturaCliente', 'refunds', 'fas fa-share-square');
     }
 
-    /**
-     * @param string $action
-     *
-     * @return bool
-     */
     protected function execPreviousAction($action)
     {
         switch ($action) {
@@ -150,9 +129,6 @@ class EditFacturaCliente extends SalesDocumentController
         return parent::execPreviousAction($action);
     }
 
-    /**
-     * @return bool
-     */
     protected function generateAccountingAction(): bool
     {
         $invoice = new FacturaCliente();
@@ -182,9 +158,6 @@ class EditFacturaCliente extends SalesDocumentController
         return true;
     }
 
-    /**
-     * @return bool
-     */
     protected function generateReceiptsAction(): bool
     {
         $invoice = new FacturaCliente();
@@ -246,9 +219,6 @@ class EditFacturaCliente extends SalesDocumentController
         }
     }
 
-    /**
-     * @return bool
-     */
     protected function newRefundAction(): bool
     {
         $invoice = new FacturaCliente();
@@ -335,9 +305,6 @@ class EditFacturaCliente extends SalesDocumentController
         return false;
     }
 
-    /**
-     * @return bool
-     */
     protected function paidAction(): bool
     {
         if (false === $this->permissions->allowUpdate) {
