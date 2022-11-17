@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="print-quantity" display="center" order="300">
+            <widget type="checkbox" fieldname="mostrar_cantidad"/>
+        </column>
+        <column name="print-price" display="center" order="310">
+            <widget type="checkbox" fieldname="mostrar_precio"/>
+        </column>
+        <column name="page-break" display="center" order="320">
+            <widget type="checkbox" fieldname="salto_pagina"/>
+        </column>
+    </columns>
+</view>
