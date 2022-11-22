@@ -247,7 +247,7 @@ class EditFacturaCliente extends SalesDocumentController
         $this->dataBase->beginTransaction();
 
         if ($invoice->editable) {
-            foreach ($invoice->getAvaliableStatus() as $status) {
+            foreach ($invoice->getAvailableStatus() as $status) {
                 if ($status->editable) {
                     continue;
                 }
