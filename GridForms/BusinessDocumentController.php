@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of OldForms plugin for FacturaScripts
- * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2017-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,6 +23,7 @@ use FacturaScripts\Core\Lib\ExtendedController\DocFilesTrait;
 use FacturaScripts\Core\Lib\ExtendedController\LogAuditTrait;
 use FacturaScripts\Core\Lib\ExtendedController\PanelController;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\BusinessDocumentFormTools;
 
 /**
@@ -32,7 +33,6 @@ use FacturaScripts\Dinamic\Lib\BusinessDocumentFormTools;
  */
 abstract class BusinessDocumentController extends PanelController
 {
-
     use DocFilesTrait;
     use LogAuditTrait;
 
@@ -215,7 +215,7 @@ abstract class BusinessDocumentController extends PanelController
 
                 $action = $this->request->request->get('action', '');
                 if ('' === $action && false === $view->model->exists()) {
-                    $this->toolBox()->i18nLog()->warning('record-not-found');
+                    Tools::log()->warning('record-not-found');
                     break;
                 }
 
@@ -264,20 +264,20 @@ abstract class BusinessDocumentController extends PanelController
     {
         $this->setTemplate(false);
         if (false === $this->permissions->allowUpdate) {
-            $this->response->setContent($this->toolBox()->i18n()->trans('not-allowed-modify'));
+            $this->response->setContent(Tools::lang()->trans('not-allowed-modify'));
             return false;
         }
 
         // valid request?
         $token = $this->request->request->get('multireqtoken', '');
         if (empty($token) || false === $this->multiRequestProtection->validate($token)) {
-            $this->response->setContent($this->toolBox()->i18n()->trans('invalid-request'));
+            $this->response->setContent(Tools::lang()->trans('invalid-request'));
             return false;
         }
 
         // duplicated request?
         if ($this->multiRequestProtection->tokenExist($token)) {
-            $this->response->setContent($this->toolBox()->i18n()->trans('duplicated-request'));
+            $this->response->setContent(Tools::lang()->trans('duplicated-request'));
             return false;
         }
 
@@ -298,7 +298,7 @@ abstract class BusinessDocumentController extends PanelController
 
     protected function saveDocumentError(string $message): string
     {
-        foreach ($this->toolBox()->log()->read('', ['critical', 'error', 'warning']) as $msg) {
+        foreach (Tools::log()->read('', ['critical', 'error', 'warning']) as $msg) {
             $message .= "\n" . $msg['message'];
         }
 
@@ -364,7 +364,7 @@ abstract class BusinessDocumentController extends PanelController
 
                 $found = true;
                 if (false === $this->updateLine($oldLine, $newLine)) {
-                    $this->toolBox()->log()->warning('ERROR IN LINE: ' . $oldLine->idlinea);
+                    Tools::log()->warning('ERROR IN LINE: ' . $oldLine->idlinea);
                     return false;
                 }
                 break;
@@ -382,7 +382,7 @@ abstract class BusinessDocumentController extends PanelController
             }
 
             if (false === $view->model->getNewLine($fLine)->save()) {
-                $this->toolBox()->log()->warning('ERROR IN NEW LINE');
+                Tools::log()->warning('ERROR IN NEW LINE');
                 return false;
             }
         }

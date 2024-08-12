@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of OldForms plugin for FacturaScripts
- * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2017-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,8 @@
 
 namespace FacturaScripts\Plugins\OldForms\GridForms;
 
+use FacturaScripts\Core\Model\Base\SalesDocument;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\Cliente;
 
 /**
@@ -28,7 +30,6 @@ use FacturaScripts\Dinamic\Model\Cliente;
  */
 abstract class SalesDocumentController extends BusinessDocumentController
 {
-
     public function getCustomFields(): array
     {
         return [
@@ -56,6 +57,14 @@ abstract class SalesDocumentController extends BusinessDocumentController
     protected function getLineXMLView(): string
     {
         return 'SalesDocumentLine';
+    }
+
+    public function getModel(): SalesDocument
+    {
+        $code = $this->request->get('code');
+        $viewName = 'Edit' . $this->getModelClassName();
+        $this->views[$viewName]->model->loadFromCode($code);
+        return $this->views[$viewName]->model;
     }
 
     /**
@@ -109,7 +118,7 @@ abstract class SalesDocumentController extends BusinessDocumentController
     protected function setSubject(&$view, $formData): string
     {
         if (empty($formData['codcliente'])) {
-            return 'ERROR: ' . $this->toolBox()->i18n()->trans('customer-not-found');
+            return 'ERROR: ' . Tools::lang()->trans('customer-not-found');
         }
 
         if ($view->model->codcliente === $formData['codcliente']) {
@@ -122,6 +131,6 @@ abstract class SalesDocumentController extends BusinessDocumentController
             return 'OK';
         }
 
-        return 'ERROR: ' . $this->toolBox()->i18n()->trans('customer-not-found');
+        return 'ERROR: ' . Tools::lang()->trans('customer-not-found');
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of OldForms plugin for FacturaScripts
- * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2017-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,10 +19,10 @@
 
 namespace FacturaScripts\Plugins\OldForms\GridForms;
 
-use FacturaScripts\Core\Base\ToolBox;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
 use FacturaScripts\Core\Model\Base\TransformerDocument;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Lib\ExportManager;
 use FacturaScripts\Dinamic\Lib\Widget\ColumnItem;
@@ -36,7 +36,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class BusinessDocumentView extends BaseView
 {
-
     const DEFAULT_TEMPLATE = 'Master/BusinessDocumentView.html.twig';
     const ITEM_SELECT_LIMIT = 500;
     const MODEL_NAMESPACE = '\\FacturaScripts\\Dinamic\\Model\\';
@@ -133,14 +132,14 @@ class BusinessDocumentView extends BaseView
             }
 
             $data['columns'][] = $item;
-            $data['headers'][] = ToolBox::i18n()->trans($col->title);
+            $data['headers'][] = Tools::lang()->trans($col->title);
         }
 
         $fixColumns = ['descripcion', 'referencia'];
         foreach ($this->lines as $line) {
             $lineArray = [];
             foreach (array_keys($line->getModelFields()) as $key) {
-                $lineArray[$key] = in_array($key, $fixColumns) ? ToolBox::utils()::fixHtml($line->{$key}) : $line->{$key};
+                $lineArray[$key] = in_array($key, $fixColumns) ? Tools::fixHtml($line->{$key}) : $line->{$key};
             }
             $data['rows'][] = $lineArray;
         }

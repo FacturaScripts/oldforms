@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of OldForms plugin for FacturaScripts
- * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2017-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,8 @@
 
 namespace FacturaScripts\Plugins\OldForms\GridForms;
 
+use FacturaScripts\Core\Model\Base\PurchaseDocument;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\Proveedor;
 
 /**
@@ -28,7 +30,6 @@ use FacturaScripts\Dinamic\Model\Proveedor;
  */
 abstract class PurchaseDocumentController extends BusinessDocumentController
 {
-
     public function getCustomFields(): array
     {
         return [
@@ -38,6 +39,14 @@ abstract class PurchaseDocumentController extends BusinessDocumentController
                 'name' => 'numproveedor'
             ]
         ];
+    }
+
+    public function getModel(): PurchaseDocument
+    {
+        $code = $this->request->get('code');
+        $viewName = 'Edit' . $this->getModelClassName();
+        $this->views[$viewName]->model->loadFromCode($code);
+        return $this->views[$viewName]->model;
     }
 
     public function getNewSubjectUrl(): string
@@ -67,7 +76,7 @@ abstract class PurchaseDocumentController extends BusinessDocumentController
     protected function setSubject(&$view, $formData): string
     {
         if (empty($formData['codproveedor'])) {
-            return 'ERROR: ' . $this->toolBox()->i18n()->trans('supplier-not-found');
+            return 'ERROR: ' . Tools::lang()->trans('supplier-not-found');
         }
 
         if ($view->model->codproveedor === $formData['codproveedor']) {
@@ -80,6 +89,6 @@ abstract class PurchaseDocumentController extends BusinessDocumentController
             return 'OK';
         }
 
-        return 'ERROR: ' . $this->toolBox()->i18n()->trans('supplier-not-found');
+        return 'ERROR: ' . Tools::lang()->trans('supplier-not-found');
     }
 }
