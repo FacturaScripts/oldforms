@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of OldForms plugin for FacturaScripts
- * Copyright (C) 2017-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2017-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,7 @@
 
 namespace FacturaScripts\Plugins\OldForms\GridForms;
 
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\DocFilesTrait;
 use FacturaScripts\Core\Lib\ExtendedController\LogAuditTrait;
 use FacturaScripts\Core\Lib\ExtendedController\PanelController;
@@ -79,6 +80,36 @@ abstract class BusinessDocumentController extends PanelController
     {
         parent::__construct($className, $uri);
         $this->documentTools = new BusinessDocumentFormTools();
+    }
+
+    protected function autocompleteAction(): array
+    {
+        $data = $this->requestGet(['field', 'fieldcode', 'fieldfilter', 'fieldtitle', 'formname', 'source', 'strict', 'term']);
+        if ($data['source'] == '') {
+            return $this->getAutocompleteValues($data['formname'], $data['field']);
+        }
+
+        $where = [];
+        foreach (DataBaseWhere::applyOperation($data['fieldfilter'] ?? '') as $field => $operation) {
+            $value = $this->request->get($field);
+            $where[] = new DataBaseWhere($field, $value, '=', $operation);
+        }
+
+        $results = [];
+        if ($data['source'] === 'Variante') {
+            $where[] = new DataBaseWhere('bloqueado', false);
+        }
+        foreach ($this->codeModel->search($data['source'], $data['fieldcode'], $data['fieldtitle'], $data['term'], $where) as $value) {
+            $results[] = ['key' => Tools::fixHtml($value->code), 'value' => Tools::fixHtml($value->description)];
+        }
+
+        if (empty($results) && '0' == $data['strict']) {
+            $results[] = ['key' => $data['term'], 'value' => $data['term']];
+        } elseif (empty($results)) {
+            $results[] = ['key' => null, 'value' => Tools::lang()->trans('no-data')];
+        }
+
+        return $results;
     }
 
     /**
