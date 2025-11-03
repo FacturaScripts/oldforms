@@ -1,21 +1,21 @@
 {#
-    /**
-     * This file is part of FacturaScripts
-     * Copyright (C) 2017-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
-     *
-     * This program is free software: you can redistribute it and/or modify
-     * it under the terms of the GNU Lesser General Public License as
-     * published by the Free Software Foundation, either version 3 of the
-     * License, or (at your option) any later version.
-     *
-     * This program is distributed in the hope that it will be useful,
-     * but WITHOUT ANY WARRANTY; without even the implied warranty of
-     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-     * GNU Lesser General Public License for more details.
-     *
-     * You should have received a copy of the GNU Lesser General Public License
-     * along with this program. If not, see http://www.gnu.org/licenses/.
-     */
+/**
+ * This file is part of FacturaScripts
+ * Copyright (C) 2017-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see http://www.gnu.org/licenses/.
+ */
 #}
 {% set thisView = fsc.getCurrentView() %}
 
@@ -23,28 +23,23 @@
     businessDocViewLineData = {{ thisView.getLineData() | raw }};
     businessDocViewFormName = "form{{ thisView.getViewName() }}";
     businessDocViewUrl = "{{ thisView.model.url('edit') | raw }}";
+
     function businessDocViewDelete(viewName) {
-        bootbox.confirm({
-            title: "{{ trans('confirm-delete') }}",
-            message: "{{ trans('are-you-sure') }}",
-            closeButton: false,
-            buttons: {
-                cancel: {
-                    label: '<i class="fas fa-times"></i> {{ trans('cancel') }}'
-                },
-                confirm: {
-                    label: '<i class="fas fa-check"></i> {{ trans('confirm') }}',
-                    className: "btn-danger"
-                }
-            },
-            callback: function (result) {
-                if (result) {
-                    $("#form" + viewName + " :input[name=\"action\"]").val("delete");
-                    $("#form" + viewName).submit();
-                }
-            }
+        const confirmModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+        const confirmBtn = document.getElementById('deleteConfirmBtn');
+
+        // Remove old event listeners
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+        // Add new event listener
+        document.getElementById('deleteConfirmBtn').addEventListener('click', function () {
+            document.querySelector("#form" + viewName + " input[name='action']").value = "delete";
+            document.getElementById("form" + viewName).submit();
+            confirmModal.hide();
         });
 
+        confirmModal.show();
         return false;
     }
 </script>
@@ -57,31 +52,30 @@
     <input type="hidden" name="idestado" value="{{ thisView.model.idestado }}" id="doc_idestado"/>
     {{ formToken() }}
     <div class="{{ currentView.settings.card ? '' : 'container-fluid' }}">
-        <div class="form-row">
+        <div class="row g-2">
             {% if thisView.model.subjectColumn() == 'codcliente' %}
                 {{ _self.customerSelect('codcliente', 'codcliente', thisView.model, fsc.getNewSubjectUrl()) }}
             {% elseif thisView.model.subjectColumn() == 'codproveedor' %}
                 {{ _self.supplierSelect('codproveedor', 'codproveedor', thisView.model, fsc.getNewSubjectUrl()) }}
             {% endif %}
             {{ _self.customSelect('doc_codalmacen', 'codalmacen', thisView.model.codalmacen, thisView.getSelectValues('Almacen')) }}
-            {{ _self.customSelect('doc_codserie', 'codserie', thisView.model.codserie, thisView.getSelectValues('Serie')) }}
-            {{ _self.customInput('doc_fecha', 'fecha', thisView.model.fecha | date('Y-m-d'), 'date', '', {class: 'form-control'}) }}
+            {{ _self.customSelect('doc_codserie', 'codserie', thisView.model.codserie, thisView.getSelectValues('Serie'), true, '', 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
+            {{ _self.customInput('doc_fecha', 'fecha', thisView.model.fecha | date('Y-m-d'), 'date', '', {class: 'form-control'}, '', 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% for field in fsc.getCustomFields() %}
                 {{ _self.customInput('doc_' ~ field.name, field.name, fsc.getViewModelValue(thisView.getViewName(), field.name),
-                    'text', field.icon, {placeholder: trans(field.label)}) }}
+                    'text', field.icon, {placeholder: trans(field.label)}, '', 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% endfor %}
-            {{ _self.customSelect('doc_codpago', 'codpago', thisView.model.codpago, thisView.getSelectValues('FormaPago')) }}
-            {{ _self.customSelect('doc_coddivisa', 'coddivisa', thisView.model.coddivisa, thisView.getSelectValues('Divisa')) }}
+            {{ _self.customSelect('doc_codpago', 'codpago', thisView.model.codpago, thisView.getSelectValues('FormaPago'), true, '', 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
+            {{ _self.customSelect('doc_coddivisa', 'coddivisa', thisView.model.coddivisa, thisView.getSelectValues('Divisa'), true, '', 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             <div class="col-sm-3 col-md-2 col-lg mb-2">
                 <div class="input-group">
-                    <input type="text" id="doc_total" name="total" value="{{ thisView.model.total }}" class="form-control text-right" disabled="" />
-                    <div class="input-group-append">
-                        {% if thisView.settings.btnSave %}
-                            <button type="button" class="btn btn-primary" onclick="businessDocViewSave();">
-                                <i class="fas fa-save" aria-hidden="true"></i>
-                            </button>
-                        {% endif %}
-                    </div>
+                    <input type="text" id="doc_total" name="total" value="{{ thisView.model.total }}"
+                           class="form-control text-right" disabled=""/>
+                    {% if thisView.settings.btnSave %}
+                        <button type="button" class="btn btn-primary" onclick="businessDocViewSave();">
+                            <i class="fas fa-save" aria-hidden="true"></i>
+                        </button>
+                    {% endif %}
                 </div>
             </div>
             {{ _self.statusSelect(thisView.model, thisView) }}
@@ -90,21 +84,21 @@
             <div class="row">
                 {{ _self.parentDocuments(thisView.model.parentDocuments(), fsc) }}
                 {% if thisView.model.femail %}
-                    <div class="col-sm">
+                    <div class="col-sm-6 col-md">
                         <div class="alert alert-info text-center">
                             <i class="fas fa-envelope fa-fw" aria-hidden="true"></i> {{ thisView.model.femail }}
                         </div>
                     </div>
                 {% endif %}
                 {% if thisView.model.paid() %}
-                    <div class="col-sm">
+                    <div class="col-sm-6 col-md">
                         <div class="alert alert-success text-center">
                             <i class="fas fa-check fa-fw" aria-hidden="true"></i> {{ trans('paid') }}
                         </div>
                     </div>
                 {% endif %}
                 {% if thisView.model.editable == false %}
-                    <div class="col-sm">
+                    <div class="col-sm-6 col-md">
                         <div class="alert alert-danger text-center">
                             <i class="fas fa-lock fa-fw"></i> {{ trans('non-editable-document') }}
                         </div>
@@ -114,7 +108,7 @@
             </div>
         {% endif %}
         <div id="document-lines"></div>
-        <div class="form-row mt-2">
+        <div class="row g-2 mt-2">
             <div class="col-sm-12">
                 <p class="text-center text-muted">
                     {{ trans('grid-help') }}
@@ -126,80 +120,109 @@
                 </p>
             </div>
             {{ _self.customInput('doc_netosindto', 'netosindto', thisView.model.netosindto, 'text', '',
-                {class: 'form-control', disabled: ''}, trans('subtotal')) }}
+                {class: 'form-control', disabled: ''}, trans('subtotal'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% if thisView.model.editable %}
                 {{ _self.customInput('doc_dtopor1', 'dtopor1', thisView.model.dtopor1, 'number', 'fas fa-percentage',
-                    {class: 'form-control'}, trans('global-dto')) }}
+                    {class: 'form-control'}, trans('global-dto'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
                 {{ _self.customInput('doc_dtopor2', 'dtopor2', thisView.model.dtopor2, 'number', 'fas fa-percentage',
-                    {class: 'form-control'}, trans('global-dto-2')) }}
+                    {class: 'form-control'}, trans('global-dto-2'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% else %}
                 {{ _self.customInput('doc_dtopor1', 'dtopor1', thisView.model.dtopor1, 'number', 'fas fa-percentage',
-                    {class: 'form-control', disabled: ''}, trans('global-dto')) }}
+                    {class: 'form-control', disabled: ''}, trans('global-dto'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
                 {{ _self.customInput('doc_dtopor2', 'dtopor2', thisView.model.dtopor2, 'number', 'fas fa-percentage',
-                    {class: 'form-control', disabled: ''}, trans('global-dto-2')) }}
+                    {class: 'form-control', disabled: ''}, trans('global-dto-2'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% endif %}
             {{ _self.customInput('doc_neto', 'neto', thisView.model.neto, 'text', '',
-                {class: 'form-control', disabled: ''}, trans('net')) }}
+                {class: 'form-control', disabled: ''}, trans('net'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {{ _self.customInput('doc_totaliva', 'totaliva', thisView.model.totaliva, 'text', '',
-                {class: 'form-control', disabled: ''}, trans('taxes')) }}
+                {class: 'form-control', disabled: ''}, trans('taxes'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% if thisView.model.totalrecargo != 0 %}
                 {{ _self.customInput('doc_totalrecargo', 'totalrecargo', thisView.model.totalrecargo, 'text', '',
-                    {class: 'form-control', disabled: ''}, trans('re')) }}
+                    {class: 'form-control', disabled: ''}, trans('re'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% endif %}
             {% if thisView.model.totalirpf != 0 %}
                 {{ _self.customInput('doc_totalirpf', 'totalirpf', thisView.model.totalirpf, 'text', '',
-                    {class: 'form-control', disabled: ''}, trans('irpf')) }}
+                    {class: 'form-control', disabled: ''}, trans('irpf'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% endif %}
             {% if thisView.model.totalsuplidos != 0 %}
                 {{ _self.customInput('doc_totalsuplidos', 'totalsuplidos', thisView.model.totalsuplidos, 'text', '',
-                    {class: 'form-control', disabled: ''}, trans('supplied-amount')) }}
+                    {class: 'form-control', disabled: ''}, trans('supplied-amount'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% endif %}
             {{ _self.customInput('doc_total2', 'total', thisView.model.total, 'text', '',
-                {class: 'form-control', disabled: ''}, trans('total')) }}
+                {class: 'form-control', disabled: ''}, trans('total'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
         </div>
-        <div class="form-row mb-2">
+        <div class="row g-2 mb-2">
             {{ thisView.getRow('business').edit(thisView.model) | raw }}
         </div>
-        <div class="form-row">
-            <div class="col">
-                {% if fsc.hasData and thisView.settings.btnDelete %}
-                    <button type="button" class="btn btn-sm btn-danger" onclick="businessDocViewDelete('{{ thisView.getViewName() }}');">
+        <div class="row g-2">
+            {% if fsc.hasData and thisView.settings.btnDelete %}
+                <div class="col-auto">
+                    <button type="button" class="btn btn-sm btn-danger"
+                            onclick="businessDocViewDelete('{{ thisView.getViewName() }}');">
                         <i class="fas fa-trash-alt fa-fw" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline-block">{{ trans('delete') }}</span>
                     </button>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
             <div class="col text-center">
                 {% block extras %}
                     {{ thisView.getRow('actions').render(false, thisView.getViewName()) | raw }}
                 {% endblock %}
             </div>
-            <div class="col text-right">
-                {% if thisView.settings.btnUndo %}
+            {% if thisView.settings.btnUndo %}
+                <div class="col-auto">
                     <a class="btn btn-sm btn-secondary" href="{{ thisView.model.url() }}">
                         <i class="fas fa-undo fa-fw" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline-block">{{ trans('undo') }}</span>
                     </a>
-                {% endif %}
-                {% if thisView.settings.btnSave %}
+                </div>
+            {% endif %}
+            {% if thisView.settings.btnSave %}
+                <div class="col-auto">
                     <button type="button" class="btn btn-sm btn-primary" onclick="businessDocViewSave();">
                         <i class="fas fa-save fa-fw" aria-hidden="true"></i> {{ trans('save') }}
                     </button>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </form>
 
-{% macro customSelect(id, name, value, allValues = {}, allowHide = true, label = '') %}
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmModalLabel">{{ trans('confirm-delete') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ trans('are-you-sure') }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> {{ trans('cancel') }}
+                </button>
+                <button type="button" class="btn btn-danger" id="deleteConfirmBtn">
+                    <i class="fas fa-check"></i> {{ trans('confirm') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% macro customSelect(id, name, value, allValues = {}, allowHide = true, label = '', colClasses = 'col-sm-3 col-md-2 col-lg') %}
     {% if allowHide and allValues | length == 1 %}
         {% for key, option in allValues %}
             <input type="hidden" id="{{ id }}" name="{{ name }}" value="{{ key }}"/>
         {% endfor %}
     {% else %}
-        <div class="col-sm-3 col-md-2 col-lg mb-2">
-            {{ label }}
-            <select id="{{ id }}" name="{{ name }}" class="form-control">
+        <div class="{{ colClasses }} mb-2">
+            {% if label %}
+                <label for="{{ id }}" class="form-label">{{ label }}</label>
+            {% endif %}
+            <select id="{{ id }}" name="{{ name }}" class="form-select">
                 {% for key, option in allValues %}
                     <option value="{{ key }}"{% if value == key %} selected=""{% endif %}>
                         {{ option | raw }}
@@ -210,18 +233,26 @@
     {% endif %}
 {% endmacro %}
 
-{% macro customInput(id, name, value, type = "text", icon = NULL, attributes = NULL, label = '') %}
-    <div class="col-sm-3 col-md-2 col-lg mb-2">
-        {{ label }}
+{% macro customInput(id, name, value, type = "text", icon = NULL, attributes = NULL, label = '', colClasses = 'col-sm-3 col-md-2 col-lg') %}
+    <div class="{{ colClasses }} mb-2">
+        {% if label %}
+            <label for="{{ id }}" class="form-label">{{ label }}</label>
+        {% endif %}
         {% if icon %}
             <div class="input-group">
-                <span class="input-group-prepend">
-                    <span class="input-group-text">
-                        <i class="{{ icon }} fa-fw" aria-hidden="true"></i>
-                    </span>
+                <span class="input-group-text">
+                    <i class="{{ icon }} fa-fw" aria-hidden="true"></i>
                 </span>
-            {% endif %}
+                <input type="{{ type }}" id="{{ id }}" name="{{ name }}" value="{{ value | raw }}" autocomplete="off"
+                       {% if attributes.class is not defined %}
+                           class="form-control"
+                       {% endif %}
 
+                       {% for attribute,attrValue in attributes %}
+                           {{ attribute }}="{{ attrValue }}"
+                       {% endfor %} /> {# end input #}
+            </div>
+        {% else %}
             <input type="{{ type }}" id="{{ id }}" name="{{ name }}" value="{{ value | raw }}" autocomplete="off"
                    {% if attributes.class is not defined %}
                        class="form-control"
@@ -230,30 +261,26 @@
                    {% for attribute,attrValue in attributes %}
                        {{ attribute }}="{{ attrValue }}"
                    {% endfor %} /> {# end input #}
-
-            {% if icon %}
-            </div>
         {% endif %}
     </div>
 {% endmacro %}
 
 {% macro customerSelect(id, name, model, newUrl) %}
-    <div class="col-sm-3 col-md-2 col-lg mb-2">
+    <div class="col-sm-6 col-md-4 col-lg-3 col-xl mb-2">
         <div class="input-group">
-            <span class="input-group-prepend">
-                {% if model.codcliente %}
-                    <a href="EditCliente?code={{ model.codcliente }}" target="_blank" class="btn btn-info">
-                        <i class="fas fa-user-cog fa-fw" aria-hidden="true"></i>
-                    </a>
-                {% else %}
-                    <a href="{{ newUrl }}" class="btn btn-success" title="{{ trans('new-customer') }}">
-                        <i class="fas fa-user-plus fa-fw" aria-hidden="true"></i>
-                    </a>
-                {% endif %}
-            </span>
+            {% if model.codcliente %}
+                <a href="EditCliente?code={{ model.codcliente }}" target="_blank" class="btn btn-info">
+                    <i class="fas fa-user-cog fa-fw" aria-hidden="true"></i>
+                </a>
+            {% else %}
+                <a href="{{ newUrl }}" class="btn btn-success" title="{{ trans('new-customer') }}">
+                    <i class="fas fa-user-plus fa-fw" aria-hidden="true"></i>
+                </a>
+            {% endif %}
             <input type="hidden" id="{{ id }}Autocomplete" name="{{ name }}" value="{{ model.codcliente }}"/>
             {% set autofocus = model.codcliente ? '' : 'autofocus=""' %}
-            <input type="text" id="{{ id }}" value="{{ model.nombrecliente | raw }}" class="form-control autocomplete-dc"
+            <input type="text" id="{{ id }}" value="{{ model.nombrecliente | raw }}"
+                   class="form-control autocomplete-dc"
                    data-field="{{ id }}" data-source="Cliente" data-fieldcode="codcliente" data-fieldtitle="nombre"
                    placeholder="{{ trans('customer') }}" {{ autofocus }} autocomplete="off"/>
         </div>
@@ -261,19 +288,17 @@
 {% endmacro %}
 
 {% macro supplierSelect(id, name, model, newUrl) %}
-    <div class="col-sm-3 col-md-2 col-lg mb-2">
+    <div class="col-sm-6 col-md-4 col-lg-3 col-xl mb-2">
         <div class="input-group">
-            <span class="input-group-prepend">
-                {% if model.codproveedor %}
-                    <a href="EditProveedor?code={{ model.codproveedor }}" target="_blank" class="btn btn-info">
-                        <i class="fas fa-user-cog fa-fw" aria-hidden="true"></i>
-                    </a>
-                {% else %}
-                    <a href="{{ newUrl }}" class="btn btn-success" title="{{ trans('new-supplier') }}">
-                        <i class="fas fa-user-plus fa-fw" aria-hidden="true"></i>
-                    </a>
-                {% endif %}
-            </span>
+            {% if model.codproveedor %}
+                <a href="EditProveedor?code={{ model.codproveedor }}" target="_blank" class="btn btn-info">
+                    <i class="fas fa-user-cog fa-fw" aria-hidden="true"></i>
+                </a>
+            {% else %}
+                <a href="{{ newUrl }}" class="btn btn-success" title="{{ trans('new-supplier') }}">
+                    <i class="fas fa-user-plus fa-fw" aria-hidden="true"></i>
+                </a>
+            {% endif %}
             <input type="hidden" id="{{ id }}Autocomplete" name="{{ name }}" value="{{ model.codproveedor }}"/>
             {% set autofocus = model.codproveedor ? '' : 'autofocus=""' %}
             <input type="text" id="{{ id }}" value="{{ model.nombre | raw }}" class="form-control autocomplete-dc"
@@ -293,12 +318,13 @@
             </button>
         </div>
     {% else %}
-        <div class="col mb-2">
+        <div class="col-auto mb-2">
             <div class="dropdown">
-                <button class="btn btn-block btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-block btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                     <i class="{{ status.icon() }} fa-fw" aria-hidden="true"></i> {{ status.nombre }}
                 </button>
-                <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-menu dropdown-menu-end">
                     {% set showDocumentStitcher = false %}
                     {% for status in view.documentStatus %}
                         {% if model.idestado == status.idestado %}
@@ -306,7 +332,8 @@
                                 <i class="{{ status.icon() }} fa-fw" aria-hidden="true"></i> {{ status.nombre }}
                             </a>
                         {% else %}
-                            <a class="dropdown-item" href="#" onclick="$('#doc_idestado').val('{{ status.idestado }}'); businessDocViewSave();">
+                            <a class="dropdown-item" href="#"
+                               onclick="$('#doc_idestado').val('{{ status.idestado }}'); businessDocViewSave();">
                                 {% if status.generadoc %}
                                     {% set showDocumentStitcher = true %}
                                 {% endif %}
@@ -316,7 +343,8 @@
                     {% endfor %}
                     {% if model.exists() and showDocumentStitcher %}
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="DocumentStitcher?model={{ model.modelClassName() }}&codes={{ model.primaryColumnValue() }}">
+                        <a class="dropdown-item"
+                           href="DocumentStitcher?model={{ model.modelClassName() }}&codes={{ model.primaryColumnValue() }}">
                             <i class="fas fa-magic fa-fw" aria-hidden="true"></i> {{ trans('group-or-split') }}
                         </a>
                     {% endif %}
@@ -328,10 +356,10 @@
 
 {% macro parentDocuments(relatedDocuments, fsc) %}
     {% if relatedDocuments | length > 2 %}
-        <div class="col-sm">
+        <div class="col-sm-6 col-md">
             <div class="alert alert-warning text-center">
                 <i class="fas fa-backward fa-fw" aria-hidden="true"></i>
-                <a href="#" data-toggle="modal" data-target="#parentsModal">{{ trans('previous-documents') }}</a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#parentsModal">{{ trans('previous-documents') }}</a>
             </div>
         </div>
         <div class="modal fade" id="parentsModal" tabindex="-1" role="dialog">
@@ -342,25 +370,23 @@
                             <i class="fas fa-backward fa-fw" aria-hidden="true"></i>
                             {{ trans('previous-documents') }}
                         </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <tbody>
-                                {% for doc in relatedDocuments %}
-                                    <tr>
-                                        <td>
-                                            <a href="{{ doc.url() }}">
-                                                {{ trans(doc.modelClassName()) }}
-                                                {{ doc.primaryDescription() }}
-                                            </a>
-                                        </td>
-                                        <td class="text-right">{{ money(doc.total) }}</td>
-                                        <td class="text-right">{{ doc.fecha }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% for doc in relatedDocuments %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ doc.url() }}">
+                                            {{ trans(doc.modelClassName()) }}
+                                            {{ doc.primaryDescription() }}
+                                        </a>
+                                    </td>
+                                    <td class="text-right">{{ money(doc.total) }}</td>
+                                    <td class="text-right">{{ doc.fecha }}</td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -369,7 +395,7 @@
         </div>
     {% else %}
         {% for relatedDoc in relatedDocuments %}
-            <div class="col-sm">
+            <div class="col-sm-6 col-md">
                 <div class="alert alert-warning text-center">
                     <i class="fas fa-backward fa-fw" aria-hidden="true"></i> {{ trans(relatedDoc.modelClassName()) }}
                     <a href="{{ relatedDoc.url() }}">{{ relatedDoc.primaryDescription() }}</a>
@@ -381,10 +407,11 @@
 
 {% macro childrenDocuments(relatedDocuments, fsc) %}
     {% if relatedDocuments | length > 2 %}
-        <div class="col-sm">
+        <div class="col-sm-6 col-md">
             <div class="alert alert-success text-center">
                 <i class="fas fa-forward fa-fw" aria-hidden="true"></i>
-                <a href="#" data-toggle="modal" data-target="#childrenModal">{{ trans('documents-generated') }}</a>
+                <a href="#" data-bs-toggle="modal"
+                   data-bs-target="#childrenModal">{{ trans('documents-generated') }}</a>
             </div>
         </div>
         <div class="modal fade" id="childrenModal" tabindex="-1" role="dialog">
@@ -395,25 +422,23 @@
                             <i class="fas fa-forward fa-fw" aria-hidden="true"></i>
                             {{ trans('documents-generated') }}
                         </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <tbody>
-                                {% for doc in relatedDocuments %}
-                                    <tr>
-                                        <td>
-                                            <a href="{{ doc.url() }}">
-                                                {{ trans(doc.modelClassName()) }}
-                                                {{ doc.primaryDescription() }}
-                                            </a>
-                                        </td>
-                                        <td class="text-right">{{ money(doc.total) }}</td>
-                                        <td class="text-right">{{ doc.fecha }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% for doc in relatedDocuments %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ doc.url() }}">
+                                            {{ trans(doc.modelClassName()) }}
+                                            {{ doc.primaryDescription() }}
+                                        </a>
+                                    </td>
+                                    <td class="text-right">{{ money(doc.total) }}</td>
+                                    <td class="text-right">{{ doc.fecha }}</td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -422,7 +447,7 @@
         </div>
     {% else %}
         {% for relatedDoc in relatedDocuments %}
-            <div class="col-sm">
+            <div class="col-sm-6 col-md">
                 <div class="alert alert-success text-center">
                     <i class="fas fa-forward fa-fw" aria-hidden="true"></i> {{ trans(relatedDoc.modelClassName()) }}
                     <a href="{{ relatedDoc.url() }}">{{ relatedDoc.primaryDescription() }}</a>

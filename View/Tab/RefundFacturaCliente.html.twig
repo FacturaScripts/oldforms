@@ -80,11 +80,11 @@
                     </div>
                     <div class="card-body">
                         <p>{{ trans('rectified-invoice-p') }}</p>
-                        <div class="form-row align-items-end">
+                        <div class="row g-2 align-items-end">
                             <div class="col-sm">
-                                <div class="form-group">
-                                    {{ trans('serie') }}
-                                    <select name="codserie" class="form-control">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ trans('serie') }}</label>
+                                    <select name="codserie" class="form-select">
                                         {% for codserie, descripcion in firstView.getSelectValues('Serie') %}
                                             {% if codserie == settings('default','codserierec','R') %}
                                                 <option value="{{ codserie }}" selected>
@@ -98,8 +98,8 @@
                                 </div>
                             </div>
                             <div class="col-sm">
-                                <div class="form-group">
-                                    {{ trans('date') }}
+                                <div class="mb-3">
+                                    <label class="form-label">{{ trans('date') }}</label>
                                     <input type="date" name="fecha" value="{{ task.end | date('Y-m-d') }}"
                                            class="form-control" required>
                                 </div>
@@ -108,10 +108,10 @@
                                 <div class="btn-group mb-3">
                                     <div class="dropdown">
                                         <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-check-square fa-fw"></i> {{ trans('select') }}
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-end">
                                             <a class="dropdown-item" href="#" onClick="return refundNone();">
                                                 <i class="far fa-square fa-fw"></i> {{ trans('select-none') }}
                                             </a>
@@ -175,7 +175,7 @@
                         </table>
                     </div>
                     <div class="card-body">
-                        <div class="form-group">
+                        <div class="mb-3">
                             <textarea name="observaciones" class="form-control"
                                       placeholder="{{ trans('observations') }}"></textarea>
                         </div>
