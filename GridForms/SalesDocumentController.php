@@ -118,7 +118,7 @@ abstract class SalesDocumentController extends BusinessDocumentController
     protected function setSubject(&$view, $formData): string
     {
         if (empty($formData['codcliente'])) {
-            return 'ERROR: ' . Tools::lang()->trans('customer-not-found');
+            return 'ERROR: ' . Tools::trans('customer-not-found');
         }
 
         if ($view->model->codcliente === $formData['codcliente']) {
@@ -131,6 +131,6 @@ abstract class SalesDocumentController extends BusinessDocumentController
             return 'OK';
         }
 
-        return 'ERROR: ' . Tools::lang()->trans('customer-not-found');
+        return 'ERROR: ' . Tools::trans('customer-not-found');
     }
 }

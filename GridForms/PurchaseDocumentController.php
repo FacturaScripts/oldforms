@@ -76,7 +76,7 @@ abstract class PurchaseDocumentController extends BusinessDocumentController
     protected function setSubject(&$view, $formData): string
     {
         if (empty($formData['codproveedor'])) {
-            return 'ERROR: ' . Tools::lang()->trans('supplier-not-found');
+            return 'ERROR: ' . Tools::trans('supplier-not-found');
         }
 
         if ($view->model->codproveedor === $formData['codproveedor']) {
@@ -89,6 +89,6 @@ abstract class PurchaseDocumentController extends BusinessDocumentController
             return 'OK';
         }
 
-        return 'ERROR: ' . Tools::lang()->trans('supplier-not-found');
+        return 'ERROR: ' . Tools::trans('supplier-not-found');
     }
 }

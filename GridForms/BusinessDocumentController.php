@@ -106,7 +106,7 @@ abstract class BusinessDocumentController extends PanelController
         if (empty($results) && '0' == $data['strict']) {
             $results[] = ['key' => $data['term'], 'value' => $data['term']];
         } elseif (empty($results)) {
-            $results[] = ['key' => null, 'value' => Tools::lang()->trans('no-data')];
+            $results[] = ['key' => null, 'value' => Tools::trans('no-data')];
         }
 
         return $results;
@@ -295,20 +295,20 @@ abstract class BusinessDocumentController extends PanelController
     {
         $this->setTemplate(false);
         if (false === $this->permissions->allowUpdate) {
-            $this->response->setContent(Tools::lang()->trans('not-allowed-modify'));
+            $this->response->setContent(Tools::trans('not-allowed-modify'));
             return false;
         }
 
         // valid request?
         $token = $this->request->request->get('multireqtoken', '');
         if (empty($token) || false === $this->multiRequestProtection->validate($token)) {
-            $this->response->setContent(Tools::lang()->trans('invalid-request'));
+            $this->response->setContent(Tools::trans('invalid-request'));
             return false;
         }
 
         // duplicated request?
         if ($this->multiRequestProtection->tokenExist($token)) {
-            $this->response->setContent(Tools::lang()->trans('duplicated-request'));
+            $this->response->setContent(Tools::trans('duplicated-request'));
             return false;
         }
 
@@ -357,10 +357,11 @@ abstract class BusinessDocumentController extends PanelController
         }
 
         // custom data fields
-        $view->model->loadFromData($data['custom']);
+        $view->model->loadFromData($data['custom'], [], false);
+
         if ($view->model->save() && $this->saveLines($view, $data['lines'])) {
             // final data fields
-            $view->model->loadFromData($data['final']);
+            $view->model->loadFromData($data['final'], [], false);
 
             $this->documentTools->recalculate($view->model);
             return $view->model->save() && $this->dataBase->commit() ?
@@ -450,9 +451,10 @@ abstract class BusinessDocumentController extends PanelController
     protected function updateLine($oldLine, array $newLine): bool
     {
         // reload line data from database to get last changes
-        $oldLine->loadFromCode($oldLine->primaryColumnValue());
+        $oldLine->reload();
 
-        $oldLine->loadFromData($newLine, ['actualizastock']);
+        $oldLine->loadFromData($newLine, ['actualizastock'], false);
+
         return $oldLine->save();
     }
 }

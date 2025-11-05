@@ -132,7 +132,7 @@ class BusinessDocumentView extends BaseView
             }
 
             $data['columns'][] = $item;
-            $data['headers'][] = Tools::lang()->trans($col->title);
+            $data['headers'][] = Tools::trans($col->title);
         }
 
         $fixColumns = ['descripcion', 'referencia'];

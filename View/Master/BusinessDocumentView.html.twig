@@ -312,7 +312,7 @@
     {% set status = model.getStatus() %}
     {% if model.exists() == false %}
     {% elseif status.generadoc %}
-        <div class="col mb-2">
+        <div class="col-auto mb-2">
             <button class="btn btn-block btn-secondary" type="button">
                 <i class="{{ status.icon() }} fa-fw" aria-hidden="true"></i> {{ status.nombre }}
             </button>
