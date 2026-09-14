@@ -73,7 +73,7 @@
                            class="form-control text-right" disabled=""/>
                     {% if thisView.settings.btnSave %}
                         <button type="button" class="btn btn-primary" onclick="businessDocViewSave();">
-                            <i class="fas fa-save" aria-hidden="true"></i>
+                            <i class="fa-solid fa-save" aria-hidden="true"></i>
                         </button>
                     {% endif %}
                 </div>
@@ -86,21 +86,21 @@
                 {% if thisView.model.femail %}
                     <div class="col-sm-6 col-md">
                         <div class="alert alert-info text-center">
-                            <i class="fas fa-envelope fa-fw" aria-hidden="true"></i> {{ thisView.model.femail }}
+                            <i class="fa-solid fa-envelope fa-fw" aria-hidden="true"></i> {{ thisView.model.femail }}
                         </div>
                     </div>
                 {% endif %}
                 {% if thisView.model.paid() %}
                     <div class="col-sm-6 col-md">
                         <div class="alert alert-success text-center">
-                            <i class="fas fa-check fa-fw" aria-hidden="true"></i> {{ trans('paid') }}
+                            <i class="fa-solid fa-check fa-fw" aria-hidden="true"></i> {{ trans('paid') }}
                         </div>
                     </div>
                 {% endif %}
                 {% if thisView.model.editable == false %}
                     <div class="col-sm-6 col-md">
                         <div class="alert alert-danger text-center">
-                            <i class="fas fa-lock fa-fw"></i> {{ trans('non-editable-document') }}
+                            <i class="fa-solid fa-lock fa-fw"></i> {{ trans('non-editable-document') }}
                         </div>
                     </div>
                 {% endif %}
@@ -122,14 +122,14 @@
             {{ _self.customInput('doc_netosindto', 'netosindto', thisView.model.netosindto, 'text', '',
                 {class: 'form-control', disabled: ''}, trans('subtotal'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% if thisView.model.editable %}
-                {{ _self.customInput('doc_dtopor1', 'dtopor1', thisView.model.dtopor1, 'number', 'fas fa-percentage',
+                {{ _self.customInput('doc_dtopor1', 'dtopor1', thisView.model.dtopor1, 'number', 'fa-solid fa-percentage',
                     {class: 'form-control'}, trans('global-dto'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
-                {{ _self.customInput('doc_dtopor2', 'dtopor2', thisView.model.dtopor2, 'number', 'fas fa-percentage',
+                {{ _self.customInput('doc_dtopor2', 'dtopor2', thisView.model.dtopor2, 'number', 'fa-solid fa-percentage',
                     {class: 'form-control'}, trans('global-dto-2'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% else %}
-                {{ _self.customInput('doc_dtopor1', 'dtopor1', thisView.model.dtopor1, 'number', 'fas fa-percentage',
+                {{ _self.customInput('doc_dtopor1', 'dtopor1', thisView.model.dtopor1, 'number', 'fa-solid fa-percentage',
                     {class: 'form-control', disabled: ''}, trans('global-dto'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
-                {{ _self.customInput('doc_dtopor2', 'dtopor2', thisView.model.dtopor2, 'number', 'fas fa-percentage',
+                {{ _self.customInput('doc_dtopor2', 'dtopor2', thisView.model.dtopor2, 'number', 'fa-solid fa-percentage',
                     {class: 'form-control', disabled: ''}, trans('global-dto-2'), 'col-sm-6 col-md-4 col-lg-3 col-xl') }}
             {% endif %}
             {{ _self.customInput('doc_neto', 'neto', thisView.model.neto, 'text', '',
@@ -159,7 +159,7 @@
                 <div class="col-auto">
                     <button type="button" class="btn btn-sm btn-danger"
                             onclick="businessDocViewDelete('{{ thisView.getViewName() }}');">
-                        <i class="fas fa-trash-alt fa-fw" aria-hidden="true"></i>
+                        <i class="fa-solid fa-trash-alt fa-fw" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline-block">{{ trans('delete') }}</span>
                     </button>
                 </div>
@@ -172,7 +172,7 @@
             {% if thisView.settings.btnUndo %}
                 <div class="col-auto">
                     <a class="btn btn-sm btn-secondary" href="{{ thisView.model.url() }}">
-                        <i class="fas fa-undo fa-fw" aria-hidden="true"></i>
+                        <i class="fa-solid fa-undo fa-fw" aria-hidden="true"></i>
                         <span class="d-none d-sm-inline-block">{{ trans('undo') }}</span>
                     </a>
                 </div>
@@ -180,7 +180,7 @@
             {% if thisView.settings.btnSave %}
                 <div class="col-auto">
                     <button type="button" class="btn btn-sm btn-primary" onclick="businessDocViewSave();">
-                        <i class="fas fa-save fa-fw" aria-hidden="true"></i> {{ trans('save') }}
+                        <i class="fa-solid fa-save fa-fw" aria-hidden="true"></i> {{ trans('save') }}
                     </button>
                 </div>
             {% endif %}
@@ -202,10 +202,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> {{ trans('cancel') }}
+                    <i class="fa-solid fa-times"></i> {{ trans('cancel') }}
                 </button>
                 <button type="button" class="btn btn-danger" id="deleteConfirmBtn">
-                    <i class="fas fa-check"></i> {{ trans('confirm') }}
+                    <i class="fa-solid fa-check"></i> {{ trans('confirm') }}
                 </button>
             </div>
         </div>
@@ -270,11 +270,11 @@
         <div class="input-group">
             {% if model.codcliente %}
                 <a href="EditCliente?code={{ model.codcliente }}" target="_blank" class="btn btn-info">
-                    <i class="fas fa-user-cog fa-fw" aria-hidden="true"></i>
+                    <i class="fa-solid fa-user-cog fa-fw" aria-hidden="true"></i>
                 </a>
             {% else %}
                 <a href="{{ newUrl }}" class="btn btn-success" title="{{ trans('new-customer') }}">
-                    <i class="fas fa-user-plus fa-fw" aria-hidden="true"></i>
+                    <i class="fa-solid fa-user-plus fa-fw" aria-hidden="true"></i>
                 </a>
             {% endif %}
             <input type="hidden" id="{{ id }}Autocomplete" name="{{ name }}" value="{{ model.codcliente }}"/>
@@ -292,11 +292,11 @@
         <div class="input-group">
             {% if model.codproveedor %}
                 <a href="EditProveedor?code={{ model.codproveedor }}" target="_blank" class="btn btn-info">
-                    <i class="fas fa-user-cog fa-fw" aria-hidden="true"></i>
+                    <i class="fa-solid fa-user-cog fa-fw" aria-hidden="true"></i>
                 </a>
             {% else %}
                 <a href="{{ newUrl }}" class="btn btn-success" title="{{ trans('new-supplier') }}">
-                    <i class="fas fa-user-plus fa-fw" aria-hidden="true"></i>
+                    <i class="fa-solid fa-user-plus fa-fw" aria-hidden="true"></i>
                 </a>
             {% endif %}
             <input type="hidden" id="{{ id }}Autocomplete" name="{{ name }}" value="{{ model.codproveedor }}"/>
@@ -345,7 +345,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item"
                            href="DocumentStitcher?model={{ model.modelClassName() }}&codes={{ model.primaryColumnValue() }}">
-                            <i class="fas fa-magic fa-fw" aria-hidden="true"></i> {{ trans('group-or-split') }}
+                            <i class="fa-solid fa-magic fa-fw" aria-hidden="true"></i> {{ trans('group-or-split') }}
                         </a>
                     {% endif %}
                 </div>
@@ -358,7 +358,7 @@
     {% if relatedDocuments | length > 2 %}
         <div class="col-sm-6 col-md">
             <div class="alert alert-warning text-center">
-                <i class="fas fa-backward fa-fw" aria-hidden="true"></i>
+                <i class="fa-solid fa-backward fa-fw" aria-hidden="true"></i>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#parentsModal">{{ trans('previous-documents') }}</a>
             </div>
         </div>
@@ -367,7 +367,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            <i class="fas fa-backward fa-fw" aria-hidden="true"></i>
+                            <i class="fa-solid fa-backward fa-fw" aria-hidden="true"></i>
                             {{ trans('previous-documents') }}
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -397,7 +397,7 @@
         {% for relatedDoc in relatedDocuments %}
             <div class="col-sm-6 col-md">
                 <div class="alert alert-warning text-center">
-                    <i class="fas fa-backward fa-fw" aria-hidden="true"></i> {{ trans(relatedDoc.modelClassName()) }}
+                    <i class="fa-solid fa-backward fa-fw" aria-hidden="true"></i> {{ trans(relatedDoc.modelClassName()) }}
                     <a href="{{ relatedDoc.url() }}">{{ relatedDoc.primaryDescription() }}</a>
                 </div>
             </div>
@@ -409,7 +409,7 @@
     {% if relatedDocuments | length > 2 %}
         <div class="col-sm-6 col-md">
             <div class="alert alert-success text-center">
-                <i class="fas fa-forward fa-fw" aria-hidden="true"></i>
+                <i class="fa-solid fa-forward fa-fw" aria-hidden="true"></i>
                 <a href="#" data-bs-toggle="modal"
                    data-bs-target="#childrenModal">{{ trans('documents-generated') }}</a>
             </div>
@@ -419,7 +419,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            <i class="fas fa-forward fa-fw" aria-hidden="true"></i>
+                            <i class="fa-solid fa-forward fa-fw" aria-hidden="true"></i>
                             {{ trans('documents-generated') }}
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -449,7 +449,7 @@
         {% for relatedDoc in relatedDocuments %}
             <div class="col-sm-6 col-md">
                 <div class="alert alert-success text-center">
-                    <i class="fas fa-forward fa-fw" aria-hidden="true"></i> {{ trans(relatedDoc.modelClassName()) }}
+                    <i class="fa-solid fa-forward fa-fw" aria-hidden="true"></i> {{ trans(relatedDoc.modelClassName()) }}
                     <a href="{{ relatedDoc.url() }}">{{ relatedDoc.primaryDescription() }}</a>
                 </div>
             </div>

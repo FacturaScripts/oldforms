@@ -19,9 +19,9 @@
 
 namespace FacturaScripts\Plugins\OldForms\Lib;
 
-use FacturaScripts\Core\Base\Utils;
 use FacturaScripts\Core\Model\Base\BusinessDocument;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\BusinessDocumentTools as DinBusinessDocumentTools;
 
 /**
@@ -94,10 +94,10 @@ class BusinessDocumentFormTools extends DinBusinessDocumentTools
 
         $this->recalculateFormLineTaxZones($newLine);
 
-        $newLine->descripcion = Utils::fixHtml($newLine->descripcion);
+        $newLine->descripcion = Tools::fixHtml($newLine->descripcion);
         $newLine->pvpsindto = $newLine->pvpunitario * $newLine->cantidad;
         $newLine->pvptotal = $newLine->pvpsindto * (100 - $newLine->dtopor) / 100 * (100 - $newLine->dtopor2) / 100;
-        $newLine->referencia = Utils::fixHtml($newLine->referencia);
+        $newLine->referencia = Tools::fixHtml($newLine->referencia);
 
         $suplido = isset($fLine['suplido']) && $fLine['suplido'] === 'true';
         if ($this->siniva || $newLine->codimpuesto === null || $suplido) {

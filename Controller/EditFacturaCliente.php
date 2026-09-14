@@ -47,18 +47,18 @@ class EditFacturaCliente extends SalesDocumentController
         $data = parent::getPageData();
         $data['menu'] = 'sales';
         $data['title'] = 'invoice';
-        $data['icon'] = 'fas fa-file-invoice-dollar';
+        $data['icon'] = 'fa-solid fa-file-invoice-dollar';
         return $data;
     }
 
     protected function createAccountsView(string $viewName = 'ListAsiento')
     {
-        $this->addListView($viewName, 'Asiento', 'accounting-entries', 'fas fa-balance-scale');
+        $this->addListView($viewName, 'Asiento', 'accounting-entries', 'fa-solid fa-balance-scale');
 
         // buttons
         $this->addButton($viewName, [
             'action' => 'generate-accounting',
-            'icon' => 'fas fa-magic',
+            'icon' => 'fa-solid fa-magic',
             'label' => 'generate-accounting-entry'
         ]);
 
@@ -68,21 +68,21 @@ class EditFacturaCliente extends SalesDocumentController
 
     protected function createReceiptsView(string $viewName = 'ListReciboCliente')
     {
-        $this->addListView($viewName, 'ReciboCliente', 'receipts', 'fas fa-dollar-sign');
+        $this->addListView($viewName, 'ReciboCliente', 'receipts', 'fa-solid fa-dollar-sign');
         $this->views[$viewName]->addOrderBy(['vencimiento'], 'expiration');
 
         // buttons
         $this->addButton($viewName, [
             'action' => 'generate-receipts',
             'confirm' => 'true',
-            'icon' => 'fas fa-magic',
+            'icon' => 'fa-solid fa-magic',
             'label' => 'generate-receipts'
         ]);
 
         $this->addButton($viewName, [
             'action' => 'paid',
             'confirm' => 'true',
-            'icon' => 'fas fa-check',
+            'icon' => 'fa-solid fa-check',
             'label' => 'paid'
         ]);
 
@@ -107,7 +107,7 @@ class EditFacturaCliente extends SalesDocumentController
 
         $this->createReceiptsView();
         $this->createAccountsView();
-        $this->addHtmlView('refunds', 'Tab/RefundFacturaCliente', 'FacturaCliente', 'refunds', 'fas fa-share-square');
+        $this->addHtmlView('refunds', 'Tab/RefundFacturaCliente', 'FacturaCliente', 'refunds', 'fa-solid fa-share-square');
     }
 
     protected function execPreviousAction($action)

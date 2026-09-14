@@ -40,7 +40,7 @@ class EditPedidoProveedor extends PurchaseDocumentController
         $data = parent::getPageData();
         $data['menu'] = 'purchases';
         $data['title'] = 'order';
-        $data['icon'] = 'fas fa-file-powerpoint';
+        $data['icon'] = 'fa-solid fa-file-powerpoint';
         return $data;
     }
 }

@@ -128,7 +128,7 @@ abstract class BusinessDocumentController extends PanelController
 
         // edit tab
         $viewName = 'Edit' . $this->getModelClassName();
-        $this->addEditView($viewName, $this->getModelClassName(), 'detail', 'fas fa-edit');
+        $this->addEditView($viewName, $this->getModelClassName(), 'detail', 'fa-solid fa-edit');
 
         // disable delete button
         $this->setSettings($viewName, 'btnDelete', false);
@@ -253,7 +253,7 @@ abstract class BusinessDocumentController extends PanelController
                 $this->title .= ' ' . $view->model->primaryDescription();
                 $this->addButton($view->getViewName(), [
                     'action' => 'CopyModel?model=' . $this->getModelClassName() . '&code=' . $code,
-                    'icon' => 'fas fa-cut',
+                    'icon' => 'fa-solid fa-cut',
                     'label' => 'copy',
                     'type' => 'link'
                 ]);

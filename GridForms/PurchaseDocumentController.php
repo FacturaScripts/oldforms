@@ -34,7 +34,7 @@ abstract class PurchaseDocumentController extends BusinessDocumentController
     {
         return [
             [
-                'icon' => 'fas fa-hashtag',
+                'icon' => 'fa-solid fa-hashtag',
                 'label' => 'numsupplier',
                 'name' => 'numproveedor'
             ]

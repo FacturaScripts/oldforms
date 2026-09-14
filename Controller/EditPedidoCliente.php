@@ -40,7 +40,7 @@ class EditPedidoCliente extends SalesDocumentController
         $data = parent::getPageData();
         $data['menu'] = 'sales';
         $data['title'] = 'order';
-        $data['icon'] = 'fas fa-file-powerpoint';
+        $data['icon'] = 'fa-solid fa-file-powerpoint';
         return $data;
     }
 }

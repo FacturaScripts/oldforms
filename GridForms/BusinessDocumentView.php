@@ -22,12 +22,12 @@ namespace FacturaScripts\Plugins\OldForms\GridForms;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
 use FacturaScripts\Core\Model\Base\TransformerDocument;
+use FacturaScripts\Core\Request;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Lib\ExportManager;
 use FacturaScripts\Dinamic\Lib\Widget\ColumnItem;
 use FacturaScripts\Dinamic\Model\EstadoDocumento;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Description of BusinessDocumentView
@@ -60,7 +60,7 @@ class BusinessDocumentView extends BaseView
      */
     public $model;
 
-    public function __construct(string $name, string $title, string $modelName, string $icon = 'fas fa-file')
+    public function __construct(string $name, string $title, string $modelName, string $icon = 'fa-solid fa-file')
     {
         parent::__construct($name, $title, $modelName, $icon);
         $this->documentStatus = $this->model->getAvailableStatus();

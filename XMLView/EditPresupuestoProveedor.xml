@@ -34,16 +34,16 @@
                 <widget type="time" fieldname="hora" required="true" />
             </column>
             <column name="number" order="130">
-                <widget type="text" fieldname="numero" icon="fas fa-hashtag" readonly="true" />
+                <widget type="text" fieldname="numero" icon="fa-solid fa-hashtag" readonly="true" />
             </column>
             <column name="numsupplier" order="140">
-                <widget type="text" fieldname="numproveedor" icon="fas fa-hashtag" />
+                <widget type="text" fieldname="numproveedor" icon="fa-solid fa-hashtag" />
             </column>
             <column name="email-sent" order="150">
                 <widget type="date" fieldname="femail" />
             </column>
         </group>
-        <group name="supplier" title="supplier" icon="fas fa-user" numcolumns="12">
+        <group name="supplier" title="supplier" icon="fa-solid fa-user" numcolumns="12">
             <column name="supplier" order="100">
                 <widget type="autocomplete" fieldname="codproveedor" onclick="EditProveedor" readonly="true" required="true">
                     <values source="proveedores" fieldcode="codproveedor" fieldtitle="razonsocial" />
@@ -53,10 +53,10 @@
                 <widget type="text" fieldname="nombre" maxlength="100" required="true" />
             </column>
             <column name="fiscal-number" order="120">
-                <widget type="text" fieldname="cifnif" maxlength="30" icon="fas fa-id-card" />
+                <widget type="text" fieldname="cifnif" maxlength="30" icon="fa-solid fa-id-card" />
             </column>
         </group>
-        <group name="payment-method" title="payment-method" icon="fas fa-dollar-sign" numcolumns="6">
+        <group name="payment-method" title="payment-method" icon="fa-solid fa-dollar-sign" numcolumns="6">
             <column name="payment" title="method-payment" order="130">
                 <widget type="select" fieldname="codpago" onclick="EditFormaPago" required="true">
                     <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion" />
@@ -68,10 +68,10 @@
                 </widget>
             </column>
             <column name="conversion-rate" order="150">
-                <widget type="number" fieldname="tasaconv" icon="fas fa-exchange-alt" />
+                <widget type="number" fieldname="tasaconv" icon="fa-solid fa-exchange-alt" />
             </column>
         </group>
-        <group name="attributes" title="attributes" icon="fas fa-database" numcolumns="6">
+        <group name="attributes" title="attributes" icon="fa-solid fa-database" numcolumns="6">
             <column name="company" order="100">
                 <widget type="select" fieldname="idempresa" onclick="EditEmpresa" required="true" readonly="dinamic">
                     <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto" />

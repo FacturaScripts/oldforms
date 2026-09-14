@@ -34,10 +34,10 @@
                 <widget type="time" fieldname="hora" required="true"/>
             </column>
             <column name="number" order="130">
-                <widget type="text" fieldname="numero" icon="fas fa-hashtag" readonly="true"/>
+                <widget type="text" fieldname="numero" icon="fa-solid fa-hashtag" readonly="true"/>
             </column>
             <column name="number2" order="140">
-                <widget type="text" fieldname="numero2" icon="fas fa-hashtag"/>
+                <widget type="text" fieldname="numero2" icon="fa-solid fa-hashtag"/>
             </column>
             <column name="expiration" order="150">
                 <widget type="date" fieldname="finoferta"/>
@@ -46,7 +46,7 @@
                 <widget type="date" fieldname="femail"/>
             </column>
         </group>
-        <group name="billingaddr" title="billing-address" icon="fas fa-file-invoice" numcolumns="12">
+        <group name="billingaddr" title="billing-address" icon="fa-solid fa-file-invoice" numcolumns="12">
             <column name="billingaddr" title="billing-address" numcolumns="2" order="100">
                 <widget type="select" fieldname="idcontactofact" onclick="EditContacto" required="true"/>
             </column>
@@ -54,10 +54,10 @@
                 <widget type="text" fieldname="nombrecliente" maxlength="100" required="true"/>
             </column>
             <column name="fiscal-number" numcolumns="2" order="120">
-                <widget type="text" fieldname="cifnif" maxlength="30" icon="fas fa-id-card"/>
+                <widget type="text" fieldname="cifnif" maxlength="30" icon="fa-solid fa-id-card"/>
             </column>
             <column name="address" numcolumns="5" order="120">
-                <widget type="text" fieldname="direccion" maxlength="100" icon="fas fa-map-marked"/>
+                <widget type="text" fieldname="direccion" maxlength="100" icon="fa-solid fa-map-marked"/>
             </column>
             <column name="post-office-box" numcolumns="2" order="130">
                 <widget type="text" fieldname="apartado" maxlength="10"/>
@@ -77,7 +77,7 @@
                 </widget>
             </column>
         </group>
-        <group name="shipaddresses" title="shipping-address" icon="fas fa-truck" numcolumns="6">
+        <group name="shipaddresses" title="shipping-address" icon="fa-solid fa-truck" numcolumns="6">
             <column name="shippingaddr" title="shipping-address" order="100">
                 <widget type="select" fieldname="idcontactoenv" onclick="EditContacto"/>
             </column>
@@ -90,7 +90,7 @@
                 <widget type="text" fieldname="codigoenv" maxlength="200"/>
             </column>
         </group>
-        <group name="payment-method" title="payment-method" icon="fas fa-dollar-sign" numcolumns="6">
+        <group name="payment-method" title="payment-method" icon="fa-solid fa-dollar-sign" numcolumns="6">
             <column name="payment" title="method-payment" order="100">
                 <widget type="select" fieldname="codpago" onclick="EditFormaPago" required="true">
                     <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
@@ -102,17 +102,17 @@
                 </widget>
             </column>
             <column name="conversion-rate" order="120">
-                <widget type="number" fieldname="tasaconv" icon="fas fa-exchange-alt"/>
+                <widget type="number" fieldname="tasaconv" icon="fa-solid fa-exchange-alt"/>
             </column>
         </group>
-        <group name="commission" title="commission" icon="fas fa-user-tie" numcolumns="4">
+        <group name="commission" title="commission" icon="fa-solid fa-user-tie" numcolumns="4">
             <column name="agent" titleurl="ListAgente" numcolumns="6" order="100">
                 <widget type="select" fieldname="codagente" onclick="EditAgente">
                     <values source="agentes" fieldcode="codagente" fieldtitle="nombre"/>
                 </widget>
             </column>
         </group>
-        <group name="attributes" title="attributes" icon="fas fa-database" numcolumns="8">
+        <group name="attributes" title="attributes" icon="fa-solid fa-database" numcolumns="8">
             <column name="company" order="100">
                 <widget type="select" fieldname="idempresa" onclick="EditEmpresa" required="true" readonly="dinamic">
                     <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"/>

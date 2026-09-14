@@ -34,7 +34,7 @@ abstract class SalesDocumentController extends BusinessDocumentController
     {
         return [
             [
-                'icon' => 'fas fa-hashtag',
+                'icon' => 'fa-solid fa-hashtag',
                 'label' => 'number2',
                 'name' => 'numero2'
             ]
