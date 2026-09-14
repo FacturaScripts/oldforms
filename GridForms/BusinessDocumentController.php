@@ -43,6 +43,21 @@ abstract class BusinessDocumentController extends PanelController
     protected $documentTools;
 
     /**
+     * Lazy loading. La clase Dinamic solamente existe si el plugin está activado,
+     * y este controlador se instancia también al desactivarlo.
+     *
+     * @return BusinessDocumentFormTools
+     */
+    protected function documentTools()
+    {
+        if (null === $this->documentTools) {
+            $this->documentTools = new BusinessDocumentFormTools();
+        }
+
+        return $this->documentTools;
+    }
+
+    /**
      * Returns an array of custom fields to add on the header.
      */
     abstract public function getCustomFields();
@@ -69,18 +84,6 @@ abstract class BusinessDocumentController extends PanelController
      * @param mixed $formData
      */
     abstract protected function setSubject(&$view, $formData);
-
-    /**
-     * Starts all the objects and properties.
-     *
-     * @param string $className
-     * @param string $uri
-     */
-    public function __construct(string $className, string $uri = '')
-    {
-        parent::__construct($className, $uri);
-        $this->documentTools = new BusinessDocumentFormTools();
-    }
 
     protected function autocompleteAction(): array
     {
@@ -281,7 +284,7 @@ abstract class BusinessDocumentController extends PanelController
         }
 
         // recalculate
-        $result = $this->documentTools->recalculateForm($this->views[$this->active]->model, $data['lines']);
+        $result = $this->documentTools()->recalculateForm($this->views[$this->active]->model, $data['lines']);
         $this->response->setContent($result);
         return false;
     }
@@ -363,7 +366,7 @@ abstract class BusinessDocumentController extends PanelController
             // final data fields
             $view->model->loadFromData($data['final'], [], false);
 
-            $this->documentTools->recalculate($view->model);
+            $this->documentTools()->recalculate($view->model);
             return $view->model->save() && $this->dataBase->commit() ?
                 'OK:' . $view->model->url() :
                 $this->saveDocumentError('ERROR');
